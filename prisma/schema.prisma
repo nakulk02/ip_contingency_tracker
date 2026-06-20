@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  hashedPassword String
+  name           String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  notes          Note[]
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  title     String
+  body      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+// --- Stage 2: IP Assets + People ---
+
+enum AssetType {
+  PATENT
+  TRADEMARK
+}
+
+enum AssetStatus {
+  DRAFT
+  FILED
+  PUBLISHED
+  REGISTERED
+  EXPIRED
+  ABANDONED
+}
+
+enum PersonRole {
+  FOUNDER
+  EMPLOYEE
+  CONTRACTOR
+  ADVISOR
+}
+
+model IpAsset {
+  id                 String                @id @default(cuid())
+  type               AssetType
+  title              String
+  jurisdiction       String
+  filingDate         DateTime?
+  status             AssetStatus           @default(DRAFT)
+  registrationNumber String?
+  description        String?
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+  assignments        AssignmentAgreement[]
+}
+
+model Person {
+  id          String                @id @default(cuid())
+  name        String
+  email       String?
+  role        PersonRole
+  startDate   DateTime
+  endDate     DateTime?
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  assignments AssignmentAgreement[]
+}
+
+// --- Stage 3: Assignments ---
+
+enum AgreementStatus {
+  SIGNED
+  MISSING
+  PENDING
+}
+
+enum AgreementScope {
+  COMPANY_WIDE
+  ASSET_SPECIFIC
+}
+
+model AssignmentAgreement {
+  id            String          @id @default(cuid())
+  personId      String
+  person        Person          @relation(fields: [personId], references: [id], onDelete: Cascade)
+  ipAssetId     String?
+  ipAsset       IpAsset?        @relation(fields: [ipAssetId], references: [id], onDelete: SetNull)
+  scope         AgreementScope  @default(COMPANY_WIDE)
+  signedDate    DateTime?
+  fileReference String?
+  status        AgreementStatus @default(MISSING)
+  notes         String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}

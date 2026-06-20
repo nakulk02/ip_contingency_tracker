@@ -1,0 +1,372 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 2400" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="hdr" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="50%" style="stop-color:#1e1b4b"/>
+      <stop offset="100%" style="stop-color:#312e81"/>
+    </linearGradient>
+    <linearGradient id="accentLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4f46e5"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444"/>
+      <stop offset="100%" style="stop-color:#dc2626"/>
+    </linearGradient>
+    <linearGradient id="blueBox" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#eef2ff"/>
+      <stop offset="100%" style="stop-color:#e0e7ff"/>
+    </linearGradient>
+    <linearGradient id="purpleBox" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#faf5ff"/>
+      <stop offset="100%" style="stop-color:#f3e8ff"/>
+    </linearGradient>
+    <linearGradient id="greenBox" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0fdf4"/>
+      <stop offset="100%" style="stop-color:#dcfce7"/>
+    </linearGradient>
+    <linearGradient id="amberBox" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fffbeb"/>
+      <stop offset="100%" style="stop-color:#fef3c7"/>
+    </linearGradient>
+    <filter id="sh" x="-3%" y="-3%" width="106%" height="112%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.08"/>
+    </filter>
+    <filter id="shLg" x="-3%" y="-5%" width="106%" height="115%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#000" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="2400" fill="#f8fafc"/>
+
+  <!-- Header -->
+  <rect x="0" y="0" width="1400" height="240" fill="url(#hdr)"/>
+  <circle cx="1350" cy="40" r="160" fill="white" opacity="0.03"/>
+  <circle cx="50" cy="200" r="100" fill="white" opacity="0.03"/>
+
+  <text x="700" y="85" text-anchor="middle" fill="#818cf8" font-size="14" font-weight="600" letter-spacing="3">STRATEGY &amp; DIFFERENTIATION</text>
+  <text x="700" y="135" text-anchor="middle" fill="white" font-size="44" font-weight="800" letter-spacing="-1">IP Contingency — What We Do Differently</text>
+  <text x="700" y="175" text-anchor="middle" fill="white" opacity="0.6" font-size="18">Focus areas, system flow, and why existing tools fall short</text>
+
+  <!-- ═══════════════════════ SECTION 1: FOCUS AREAS ═══════════════════════ -->
+  <text x="700" y="300" text-anchor="middle" fill="#1e1b4b" font-size="28" font-weight="700">Our Three Focus Areas</text>
+  <rect x="665" y="315" width="70" height="4" rx="2" fill="url(#accentLine)"/>
+  <text x="700" y="345" text-anchor="middle" fill="#64748b" font-size="15">Every feature we build serves one of these pillars</text>
+
+  <!-- Pillar 1: Ownership -->
+  <g filter="url(#shLg)">
+    <rect x="60" y="375" width="400" height="280" rx="20" fill="white"/>
+    <rect x="60" y="375" width="400" height="6" rx="3" fill="#4f46e5"/>
+    <rect x="90" y="405" width="60" height="60" rx="16" fill="url(#blueBox)"/>
+    <path d="M112,427 L120,427 L128,427 M112,435 L128,435 M120,443 L128,443" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="170" y="430" fill="#4f46e5" font-size="13" font-weight="600" letter-spacing="1.5">PILLAR 1</text>
+    <text x="170" y="455" fill="#1e1b4b" font-size="22" font-weight="700">Ownership Integrity</text>
+    <line x1="90" y1="475" x2="430" y2="475" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="90" y="500" fill="#475569" font-size="14" font-weight="500">The #1 risk for startups: unclear IP ownership.</text>
+    <text x="90" y="520" fill="#475569" font-size="14" font-weight="500">We make gaps impossible to ignore.</text>
+
+    <circle cx="105" cy="552" r="4" fill="#4f46e5"/>
+    <text x="120" y="557" fill="#334155" font-size="13">Track every person who ever touched your IP</text>
+    <circle cx="105" cy="577" r="4" fill="#4f46e5"/>
+    <text x="120" y="582" fill="#334155" font-size="13">Map assignment agreements to assets + people</text>
+    <circle cx="105" cy="602" r="4" fill="#4f46e5"/>
+    <text x="120" y="607" fill="#334155" font-size="13">Priority scoring: current team = HIGH, departed = MEDIUM</text>
+    <circle cx="105" cy="627" r="4" fill="#4f46e5"/>
+    <text x="120" y="632" fill="#334155" font-size="13">Dashboard surfaces gaps in real-time</text>
+  </g>
+
+  <!-- Pillar 2: Deadlines -->
+  <g filter="url(#shLg)">
+    <rect x="500" y="375" width="400" height="280" rx="20" fill="white"/>
+    <rect x="500" y="375" width="400" height="6" rx="3" fill="#7c3aed"/>
+    <rect x="530" y="405" width="60" height="60" rx="16" fill="url(#purpleBox)"/>
+    <text x="553" y="442" text-anchor="middle" fill="#7c3aed" font-size="24">&#x23F0;</text>
+    <text x="610" y="430" fill="#7c3aed" font-size="13" font-weight="600" letter-spacing="1.5">PILLAR 2</text>
+    <text x="610" y="455" fill="#1e1b4b" font-size="22" font-weight="700">Deadline Intelligence</text>
+    <line x1="530" y1="475" x2="870" y2="475" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="530" y="500" fill="#475569" font-size="14" font-weight="500">One missed deadline = permanent IP loss.</text>
+    <text x="530" y="520" fill="#475569" font-size="14" font-weight="500">We automate the safety net.</text>
+
+    <circle cx="545" cy="552" r="4" fill="#7c3aed"/>
+    <text x="560" y="557" fill="#334155" font-size="13">Rules engine: auto-generate deadlines from filings</text>
+    <circle cx="545" cy="577" r="4" fill="#7c3aed"/>
+    <text x="560" y="582" fill="#334155" font-size="13">Urgency view: overdue / 30d / 60d / 90d tabs</text>
+    <circle cx="545" cy="602" r="4" fill="#7c3aed"/>
+    <text x="560" y="607" fill="#334155" font-size="13">Daily email digest to responsible parties</text>
+    <circle cx="545" cy="627" r="4" fill="#7c3aed"/>
+    <text x="560" y="632" fill="#334155" font-size="13">Jurisdiction-aware: US, EU, JP rules differ</text>
+  </g>
+
+  <!-- Pillar 3: Coverage -->
+  <g filter="url(#shLg)">
+    <rect x="940" y="375" width="400" height="280" rx="20" fill="white"/>
+    <rect x="940" y="375" width="400" height="6" rx="3" fill="#10b981"/>
+    <rect x="970" y="405" width="60" height="60" rx="16" fill="url(#greenBox)"/>
+    <text x="993" y="442" text-anchor="middle" fill="#10b981" font-size="24">&#x1F30D;</text>
+    <text x="1050" y="430" fill="#10b981" font-size="13" font-weight="600" letter-spacing="1.5">PILLAR 3</text>
+    <text x="1050" y="455" fill="#1e1b4b" font-size="22" font-weight="700">Coverage Mapping</text>
+    <line x1="970" y1="475" x2="1310" y2="475" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="970" y="500" fill="#475569" font-size="14" font-weight="500">Jurisdictional blind spots = lost markets.</text>
+    <text x="970" y="520" fill="#475569" font-size="14" font-weight="500">We make the map visible.</text>
+
+    <circle cx="985" cy="552" r="4" fill="#10b981"/>
+    <text x="1000" y="557" fill="#334155" font-size="13">Filed-in vs. intended-but-not-filed view</text>
+    <circle cx="985" cy="577" r="4" fill="#10b981"/>
+    <text x="1000" y="582" fill="#334155" font-size="13">Per-asset jurisdiction matrix</text>
+    <circle cx="985" cy="602" r="4" fill="#10b981"/>
+    <text x="1000" y="607" fill="#334155" font-size="13">Structured jurisdiction list (not free text)</text>
+    <circle cx="985" cy="627" r="4" fill="#10b981"/>
+    <text x="1000" y="632" fill="#334155" font-size="13">Expansion planning with gap visibility</text>
+  </g>
+
+  <!-- ═══════════════════════ SECTION 2: SYSTEM FLOW ═══════════════════════ -->
+  <text x="700" y="730" text-anchor="middle" fill="#1e1b4b" font-size="28" font-weight="700">End-to-End System Flow</text>
+  <rect x="665" y="745" width="70" height="4" rx="2" fill="url(#accentLine)"/>
+
+  <!-- Flow diagram -->
+  <g filter="url(#sh)">
+    <rect x="60" y="775" width="1280" height="440" rx="20" fill="white"/>
+
+    <!-- Row 1: Data Entry -->
+    <text x="130" y="815" fill="#64748b" font-size="12" font-weight="600" letter-spacing="1.5">DATA ENTRY</text>
+
+    <rect x="130" y="830" width="160" height="55" rx="10" fill="url(#blueBox)" stroke="#c7d2fe" stroke-width="1"/>
+    <text x="210" y="863" text-anchor="middle" fill="#3730a3" font-size="14" font-weight="600">IP Assets</text>
+
+    <path d="M295,857 L325,857" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#grayArrow)"/>
+    <defs><marker id="grayArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/></marker></defs>
+
+    <rect x="330" y="830" width="160" height="55" rx="10" fill="url(#purpleBox)" stroke="#ddd6fe" stroke-width="1"/>
+    <text x="410" y="863" text-anchor="middle" fill="#5b21b6" font-size="14" font-weight="600">People</text>
+
+    <path d="M495,857 L525,857" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#grayArrow)"/>
+
+    <rect x="530" y="830" width="190" height="55" rx="10" fill="url(#greenBox)" stroke="#bbf7d0" stroke-width="1"/>
+    <text x="625" y="863" text-anchor="middle" fill="#166534" font-size="14" font-weight="600">Assignments</text>
+
+    <path d="M725,857 L755,857" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#grayArrow)"/>
+
+    <rect x="760" y="830" width="160" height="55" rx="10" fill="url(#amberBox)" stroke="#fde68a" stroke-width="1"/>
+    <text x="840" y="863" text-anchor="middle" fill="#92400e" font-size="14" font-weight="600">Jurisdictions</text>
+
+    <path d="M925,857 L955,857" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#grayArrow)"/>
+
+    <rect x="960" y="830" width="160" height="55" rx="10" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+    <text x="1040" y="863" text-anchor="middle" fill="#991b1b" font-size="14" font-weight="600">Documents</text>
+
+    <!-- Big arrow down -->
+    <path d="M625,895 L625,930" stroke="#4f46e5" stroke-width="2" stroke-dasharray="6,3"/>
+    <polygon points="619,930 625,942 631,930" fill="#4f46e5"/>
+
+    <!-- Row 2: Processing -->
+    <text x="130" y="968" fill="#64748b" font-size="12" font-weight="600" letter-spacing="1.5">AUTOMATED PROCESSING</text>
+
+    <rect x="130" y="985" width="250" height="50" rx="10" fill="#4f46e5"/>
+    <text x="255" y="1015" text-anchor="middle" fill="white" font-size="13" font-weight="600">Ownership Gap Detection</text>
+
+    <rect x="410" y="985" width="250" height="50" rx="10" fill="#7c3aed"/>
+    <text x="535" y="1015" text-anchor="middle" fill="white" font-size="13" font-weight="600">Deadline Auto-Generation</text>
+
+    <rect x="690" y="985" width="250" height="50" rx="10" fill="#10b981"/>
+    <text x="815" y="1015" text-anchor="middle" fill="white" font-size="13" font-weight="600">Coverage Gap Analysis</text>
+
+    <rect x="970" y="985" width="250" height="50" rx="10" fill="#f59e0b"/>
+    <text x="1095" y="1015" text-anchor="middle" fill="white" font-size="13" font-weight="600">Audit Trail Logging</text>
+
+    <!-- Arrow down -->
+    <path d="M625,1045 L625,1070" stroke="#4f46e5" stroke-width="2" stroke-dasharray="6,3"/>
+    <polygon points="619,1070 625,1082 631,1070" fill="#4f46e5"/>
+
+    <!-- Row 3: Outputs -->
+    <text x="130" y="1105" fill="#64748b" font-size="12" font-weight="600" letter-spacing="1.5">OUTPUTS &amp; ALERTS</text>
+
+    <rect x="130" y="1120" width="200" height="65" rx="12" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+    <text x="230" y="1147" text-anchor="middle" fill="#991b1b" font-size="13" font-weight="700">Gap Dashboard</text>
+    <text x="230" y="1167" text-anchor="middle" fill="#b91c1c" font-size="11">Real-time risk overview</text>
+
+    <rect x="360" y="1120" width="200" height="65" rx="12" fill="#fefce8" stroke="#fde047" stroke-width="1.5"/>
+    <text x="460" y="1147" text-anchor="middle" fill="#854d0e" font-size="13" font-weight="700">Urgency View</text>
+    <text x="460" y="1167" text-anchor="middle" fill="#a16207" font-size="11">Deadline countdown</text>
+
+    <rect x="590" y="1120" width="200" height="65" rx="12" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+    <text x="690" y="1147" text-anchor="middle" fill="#166534" font-size="13" font-weight="700">Coverage Map</text>
+    <text x="690" y="1167" text-anchor="middle" fill="#15803d" font-size="11">Jurisdiction matrix</text>
+
+    <rect x="820" y="1120" width="200" height="65" rx="12" fill="#eef2ff" stroke="#a5b4fc" stroke-width="1.5"/>
+    <text x="920" y="1147" text-anchor="middle" fill="#3730a3" font-size="13" font-weight="700">Email Digest</text>
+    <text x="920" y="1167" text-anchor="middle" fill="#4338ca" font-size="11">Daily deadline alerts</text>
+
+    <rect x="1050" y="1120" width="200" height="65" rx="12" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1.5"/>
+    <text x="1150" y="1147" text-anchor="middle" fill="#6b21a8" font-size="13" font-weight="700">Draft Forms</text>
+    <text x="1150" y="1167" text-anchor="middle" fill="#7e22ce" font-size="11">Pre-filled PDF generation</text>
+  </g>
+
+  <!-- ═══════════════════════ SECTION 3: COMPETITIVE COMPARISON ═══════════════════════ -->
+  <text x="700" y="1290" text-anchor="middle" fill="#1e1b4b" font-size="28" font-weight="700">How We Compare to Competitors</text>
+  <rect x="665" y="1305" width="70" height="4" rx="2" fill="url(#accentLine)"/>
+  <text x="700" y="1335" text-anchor="middle" fill="#64748b" font-size="15">Existing tools either do too much (and cost $$$) or too little (spreadsheets)</text>
+
+  <!-- Comparison table -->
+  <g filter="url(#shLg)">
+    <rect x="60" y="1360" width="1280" height="460" rx="20" fill="white"/>
+
+    <!-- Table header -->
+    <rect x="60" y="1360" width="1280" height="55" rx="20" fill="#1e1b4b"/>
+    <rect x="60" y="1390" width="1280" height="25" fill="#1e1b4b"/>
+    <text x="200" y="1393" text-anchor="middle" fill="white" font-size="14" font-weight="700">Feature</text>
+    <text x="460" y="1393" text-anchor="middle" fill="white" font-size="14" font-weight="700">Spreadsheets</text>
+    <text x="680" y="1393" text-anchor="middle" fill="white" font-size="14" font-weight="700">Enterprise IPMS</text>
+    <text x="680" y="1408" text-anchor="middle" fill="white" opacity="0.6" font-size="10">(Anaqua, IPfolio, etc.)</text>
+    <text x="920" y="1393" text-anchor="middle" fill="white" font-size="14" font-weight="700">Generic PM Tools</text>
+    <text x="920" y="1408" text-anchor="middle" fill="white" opacity="0.6" font-size="10">(Notion, Asana, etc.)</text>
+    <text x="1180" y="1388" text-anchor="middle" fill="#a5b4fc" font-size="15" font-weight="800">IP Contingency</text>
+    <text x="1180" y="1406" text-anchor="middle" fill="#818cf8" font-size="10" font-weight="600">OUR APPROACH</text>
+
+    <!-- Row dividers -->
+    <line x1="340" y1="1415" x2="340" y2="1815" stroke="#e2e8f0" stroke-width="1"/>
+    <line x1="570" y1="1415" x2="570" y2="1815" stroke="#e2e8f0" stroke-width="1"/>
+    <line x1="800" y1="1415" x2="800" y2="1815" stroke="#e2e8f0" stroke-width="1"/>
+    <line x1="1060" y1="1415" x2="1060" y2="1815" stroke="#e2e8f0" stroke-width="1"/>
+
+    <!-- Row 1 -->
+    <rect x="60" y="1415" width="1280" height="50" fill="#f8fafc"/>
+    <text x="90" y="1445" fill="#1e293b" font-size="13" font-weight="600">Ownership gap detection</text>
+    <text x="460" y="1445" text-anchor="middle" fill="#ef4444" font-size="13">Manual review</text>
+    <text x="680" y="1445" text-anchor="middle" fill="#f59e0b" font-size="13">Available (complex)</text>
+    <text x="920" y="1445" text-anchor="middle" fill="#ef4444" font-size="13">Not built for IP</text>
+    <rect x="1110" y="1430" width="140" height="26" rx="13" fill="#dcfce7"/>
+    <text x="1180" y="1448" text-anchor="middle" fill="#166534" font-size="12" font-weight="700">Auto-detected</text>
+
+    <!-- Row 2 -->
+    <text x="90" y="1495" fill="#1e293b" font-size="13" font-weight="600">Deadline auto-generation</text>
+    <text x="460" y="1495" text-anchor="middle" fill="#ef4444" font-size="13">None</text>
+    <text x="680" y="1495" text-anchor="middle" fill="#f59e0b" font-size="13">Rules engine ($$$)</text>
+    <text x="920" y="1495" text-anchor="middle" fill="#ef4444" font-size="13">Manual only</text>
+    <rect x="1110" y="1480" width="140" height="26" rx="13" fill="#dcfce7"/>
+    <text x="1180" y="1498" text-anchor="middle" fill="#166534" font-size="12" font-weight="700">Built-in rules</text>
+
+    <!-- Row 3 -->
+    <rect x="60" y="1515" width="1280" height="50" fill="#f8fafc"/>
+    <text x="90" y="1545" fill="#1e293b" font-size="13" font-weight="600">Jurisdiction coverage map</text>
+    <text x="460" y="1545" text-anchor="middle" fill="#ef4444" font-size="13">Color-coded cells</text>
+    <text x="680" y="1545" text-anchor="middle" fill="#10b981" font-size="13">Yes</text>
+    <text x="920" y="1545" text-anchor="middle" fill="#ef4444" font-size="13">No</text>
+    <rect x="1110" y="1530" width="140" height="26" rx="13" fill="#dcfce7"/>
+    <text x="1180" y="1548" text-anchor="middle" fill="#166534" font-size="12" font-weight="700">Filed vs. intended</text>
+
+    <!-- Row 4 -->
+    <text x="90" y="1595" fill="#1e293b" font-size="13" font-weight="600">Setup complexity</text>
+    <rect x="410" y="1580" width="100" height="26" rx="13" fill="#dcfce7"/>
+    <text x="460" y="1598" text-anchor="middle" fill="#166534" font-size="12" font-weight="600">Low</text>
+    <rect x="630" y="1580" width="100" height="26" rx="13" fill="#fef2f2"/>
+    <text x="680" y="1598" text-anchor="middle" fill="#991b1b" font-size="12" font-weight="600">6-12 months</text>
+    <rect x="870" y="1580" width="100" height="26" rx="13" fill="#fefce8"/>
+    <text x="920" y="1598" text-anchor="middle" fill="#854d0e" font-size="12" font-weight="600">Medium</text>
+    <rect x="1110" y="1580" width="140" height="26" rx="13" fill="#dcfce7"/>
+    <text x="1180" y="1598" text-anchor="middle" fill="#166534" font-size="12" font-weight="700">Minutes</text>
+
+    <!-- Row 5 -->
+    <rect x="60" y="1615" width="1280" height="50" fill="#f8fafc"/>
+    <text x="90" y="1645" fill="#1e293b" font-size="13" font-weight="600">Cost</text>
+    <rect x="410" y="1630" width="100" height="26" rx="13" fill="#dcfce7"/>
+    <text x="460" y="1648" text-anchor="middle" fill="#166534" font-size="12" font-weight="600">Free</text>
+    <rect x="630" y="1630" width="100" height="26" rx="13" fill="#fef2f2"/>
+    <text x="680" y="1648" text-anchor="middle" fill="#991b1b" font-size="12" font-weight="600">$50K-200K/yr</text>
+    <rect x="870" y="1630" width="100" height="26" rx="13" fill="#fefce8"/>
+    <text x="920" y="1648" text-anchor="middle" fill="#854d0e" font-size="12" font-weight="600">$10-50/user</text>
+    <rect x="1110" y="1630" width="140" height="26" rx="13" fill="#dcfce7"/>
+    <text x="1180" y="1648" text-anchor="middle" fill="#166534" font-size="12" font-weight="700">Affordable</text>
+
+    <!-- Row 6 -->
+    <text x="90" y="1695" fill="#1e293b" font-size="13" font-weight="600">Audit trail</text>
+    <text x="460" y="1695" text-anchor="middle" fill="#ef4444" font-size="13">None</text>
+    <text x="680" y="1695" text-anchor="middle" fill="#10b981" font-size="13">Yes</text>
+    <text x="920" y="1695" text-anchor="middle" fill="#f59e0b" font-size="13">Basic history</text>
+    <rect x="1110" y="1680" width="140" height="26" rx="13" fill="#dcfce7"/>
+    <text x="1180" y="1698" text-anchor="middle" fill="#166534" font-size="12" font-weight="700">Full diff tracking</text>
+
+    <!-- Row 7 -->
+    <rect x="60" y="1715" width="1280" height="50" fill="#f8fafc"/>
+    <text x="90" y="1745" fill="#1e293b" font-size="13" font-weight="600">Email deadline alerts</text>
+    <text x="460" y="1745" text-anchor="middle" fill="#ef4444" font-size="13">Manual calendar</text>
+    <text x="680" y="1745" text-anchor="middle" fill="#10b981" font-size="13">Yes</text>
+    <text x="920" y="1745" text-anchor="middle" fill="#f59e0b" font-size="13">Generic reminders</text>
+    <rect x="1110" y="1730" width="140" height="26" rx="13" fill="#dcfce7"/>
+    <text x="1180" y="1748" text-anchor="middle" fill="#166534" font-size="12" font-weight="700">Daily IP digest</text>
+
+    <!-- Row 8 -->
+    <text x="90" y="1795" fill="#1e293b" font-size="13" font-weight="600">Draft form generation</text>
+    <text x="460" y="1795" text-anchor="middle" fill="#ef4444" font-size="13">Copy-paste</text>
+    <text x="680" y="1795" text-anchor="middle" fill="#10b981" font-size="13">Templates</text>
+    <text x="920" y="1795" text-anchor="middle" fill="#ef4444" font-size="13">No</text>
+    <rect x="1110" y="1780" width="140" height="26" rx="13" fill="#dcfce7"/>
+    <text x="1180" y="1798" text-anchor="middle" fill="#166534" font-size="12" font-weight="700">Auto-filled PDFs</text>
+  </g>
+
+  <!-- ═══════════════════════ SECTION 4: WHY WE WIN ═══════════════════════ -->
+  <text x="700" y="1885" text-anchor="middle" fill="#1e1b4b" font-size="28" font-weight="700">Our Competitive Advantage</text>
+  <rect x="665" y="1900" width="70" height="4" rx="2" fill="url(#accentLine)"/>
+
+  <!-- Advantage cards -->
+  <g filter="url(#shLg)">
+    <rect x="60" y="1930" width="395" height="200" rx="20" fill="white" stroke="#4f46e5" stroke-width="2"/>
+    <rect x="85" y="1960" width="50" height="50" rx="14" fill="#eef2ff"/>
+    <text x="110" y="1993" text-anchor="middle" fill="#4f46e5" font-size="24" font-weight="700">1</text>
+    <text x="150" y="1985" fill="#1e1b4b" font-size="18" font-weight="700">Purpose-Built for IP Risk</text>
+    <line x1="85" y1="2010" x2="430" y2="2010" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="85" y="2035" fill="#475569" font-size="13">Not a generic tool adapted for IP. Every screen,</text>
+    <text x="85" y="2055" fill="#475569" font-size="13">every query, every alert is designed for one job:</text>
+    <text x="85" y="2078" fill="#4f46e5" font-size="14" font-weight="700">surface IP ownership gaps and deadline risk.</text>
+    <text x="85" y="2103" fill="#64748b" font-size="12">Competitors are either too broad or too expensive.</text>
+  </g>
+
+  <g filter="url(#shLg)">
+    <rect x="495" y="1930" width="395" height="200" rx="20" fill="white" stroke="#7c3aed" stroke-width="2"/>
+    <rect x="520" y="1960" width="50" height="50" rx="14" fill="#faf5ff"/>
+    <text x="545" y="1993" text-anchor="middle" fill="#7c3aed" font-size="24" font-weight="700">2</text>
+    <text x="585" y="1985" fill="#1e1b4b" font-size="18" font-weight="700">Instant Time-to-Value</text>
+    <line x1="520" y1="2010" x2="865" y2="2010" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="520" y="2035" fill="#475569" font-size="13">Enterprise IPMS takes 6-12 months to deploy.</text>
+    <text x="520" y="2055" fill="#475569" font-size="13">We're usable from day one. Add your assets,</text>
+    <text x="520" y="2078" fill="#7c3aed" font-size="14" font-weight="700">see gaps immediately. No consultants needed.</text>
+    <text x="520" y="2103" fill="#64748b" font-size="12">Small teams can't wait a year for IP tooling.</text>
+  </g>
+
+  <g filter="url(#shLg)">
+    <rect x="930" y="1930" width="410" height="200" rx="20" fill="white" stroke="#10b981" stroke-width="2"/>
+    <rect x="955" y="1960" width="50" height="50" rx="14" fill="#f0fdf4"/>
+    <text x="980" y="1993" text-anchor="middle" fill="#10b981" font-size="24" font-weight="700">3</text>
+    <text x="1020" y="1985" fill="#1e1b4b" font-size="18" font-weight="700">Proactive, Not Reactive</text>
+    <line x1="955" y1="2010" x2="1315" y2="2010" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="955" y="2035" fill="#475569" font-size="13">Spreadsheets only tell you what you entered.</text>
+    <text x="955" y="2055" fill="#475569" font-size="13">We actively surface what's missing — gaps you</text>
+    <text x="955" y="2078" fill="#10b981" font-size="14" font-weight="700">didn't know about until due diligence hit.</text>
+    <text x="955" y="2103" fill="#64748b" font-size="12">The dashboard shows risk, not just data.</text>
+  </g>
+
+  <!-- ═══════════════════════ BOTTOM TAGLINE ═══════════════════════ -->
+  <rect x="0" y="2180" width="1400" height="220" fill="url(#hdr)"/>
+  <circle cx="1300" cy="2220" r="120" fill="white" opacity="0.03"/>
+
+  <text x="700" y="2260" text-anchor="middle" fill="white" font-size="32" font-weight="700">The right level of tooling for growing IP portfolios.</text>
+  <text x="700" y="2300" text-anchor="middle" fill="white" opacity="0.6" font-size="18">Not a spreadsheet. Not a $200K enterprise suite. The tool that actually gets used.</text>
+
+  <!-- Three stats -->
+  <text x="350" y="2360" text-anchor="middle" fill="#818cf8" font-size="14" font-weight="600">OWNERSHIP GAPS</text>
+  <text x="350" y="2385" text-anchor="middle" fill="white" font-size="13">Detected in real-time</text>
+
+  <line x1="530" y1="2340" x2="530" y2="2390" stroke="white" opacity="0.15" stroke-width="1"/>
+
+  <text x="700" y="2360" text-anchor="middle" fill="#818cf8" font-size="14" font-weight="600">DEADLINES</text>
+  <text x="700" y="2385" text-anchor="middle" fill="white" font-size="13">Auto-generated &amp; tracked</text>
+
+  <line x1="870" y1="2340" x2="870" y2="2390" stroke="white" opacity="0.15" stroke-width="1"/>
+
+  <text x="1050" y="2360" text-anchor="middle" fill="#818cf8" font-size="14" font-weight="600">COVERAGE</text>
+  <text x="1050" y="2385" text-anchor="middle" fill="white" font-size="13">Jurisdiction gaps visible</text>
+</svg>

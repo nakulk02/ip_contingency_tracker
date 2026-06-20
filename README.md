@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IP Contingency Tracker
 
-## Getting Started
+An internal tool for in-house counsel to **surface IP ownership gaps and deadline risk** before they become costly problems.
 
-First, run the development server:
+## The Problem
+
+Startups and growing companies often have incomplete IP assignment chains — contractors without signed agreements, employees missing IP assignments, and patents with no clear ownership trail. These gaps are invisible until a due diligence event (fundraise, acquisition, IPO) turns them into deal-blockers.
+
+## What This Tool Does
+
+**Ownership Gap Dashboard** — See at a glance which IP assets lack signed assignment agreements and which team members are missing coverage. High-priority gaps (current employees/contractors) are flagged automatically.
+
+**IP Asset Registry** — Track patents, trademarks, and other IP assets across jurisdictions with filing dates, status, and registration numbers.
+
+**People & Role Management** — Maintain a roster of founders, employees, contractors, and advisors with their start/end dates and roles.
+
+**Assignment Tracking** — Record company-wide and asset-specific IP assignment agreements, track their status (Signed, Pending, Missing), and link them to people and assets.
+
+**Notes** — Quick notes and reminders for IP-related tasks, checklists, and meeting notes.
+
+## Tech Stack
+
+- **Next.js** (App Router) — React framework
+- **PostgreSQL** — Database
+- **Prisma** — ORM and migrations
+- **NextAuth.js** — Authentication (JWT)
+- **Tailwind CSS + shadcn/ui** — UI components
+- **Zod** — Validation
+
+## Local Development Setup
+
+### Prerequisites
+
+- Node.js 18+
+- PostgreSQL running locally
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure environment
+
+Copy `.env.example` to `.env` and update the values:
+
+```bash
+cp .env.example .env
+```
+
+Set your `DATABASE_URL` to point to your local PostgreSQL instance and generate a `NEXTAUTH_SECRET`:
+
+```
+DATABASE_URL="postgresql://user:password@localhost:5432/ip_contingency?schema=public"
+NEXTAUTH_SECRET="your-secret-here"
+NEXTAUTH_URL="http://localhost:3000"
+```
+
+### 3. Run database migrations and seed
+
+```bash
+npx prisma migrate deploy
+npx prisma db seed
+```
+
+### 4. Start the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Demo Credentials
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+After seeding, you can log in with:
 
-## Learn More
+- **Email:** `demo@example.com`
+- **Password:** `password123`
 
-To learn more about Next.js, take a look at the following resources:
+The seed data includes sample IP assets, people with various roles, and assignment agreements — including deliberate gaps that appear on the dashboard.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Private — All rights reserved.

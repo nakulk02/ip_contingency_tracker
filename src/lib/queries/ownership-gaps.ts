@@ -1,47 +1,59 @@
 import { prisma } from "@/lib/prisma";
 
-export async function getAssetsWithGaps() {
-  const assets = await prisma.ipAsset.findMany({
-    include: {
-      assignments: {
-        where: { status: "SIGNED" },
-      },
+export async function getAssetsWithGaps(limit?: number) {
+  return prisma.ipAsset.findMany({
+    where: {
+      assignments: { none: { status: "SIGNED" } },
     },
     orderBy: { title: "asc" },
+    ...(limit ? { take: limit } : {}),
   });
-
-  return assets.filter((a) => a.assignments.length === 0);
 }
 
-export async function getPeopleWithGaps() {
+export async function getPeopleWithGaps(limit?: number) {
   const people = await prisma.person.findMany({
-    include: {
-      assignments: {
-        where: { status: "SIGNED" },
-      },
+    where: {
+      deletedAt: null,
+      assignments: { none: { status: "SIGNED" } },
     },
     orderBy: { name: "asc" },
+    ...(limit ? { take: limit } : {}),
   });
 
-  return people
-    .filter((p) => p.assignments.length === 0)
-    .map((p) => ({
-      ...p,
-      priority: p.endDate === null ? "HIGH" : "MEDIUM",
-    }));
+  return people.map((p) => ({
+    ...p,
+    priority: p.endDate === null ? ("HIGH" as const) : ("MEDIUM" as const),
+  }));
 }
 
-export async function getOwnershipGapSummary() {
-  const [assetsAtRisk, peopleWithGaps] = await Promise.all([
-    getAssetsWithGaps(),
-    getPeopleWithGaps(),
-  ]);
+export async function getOwnershipGapSummary(limit = 5) {
+  const [assetsAtRiskCount, peopleWithGapsCount, highPriorityCount, assets, people] =
+    await Promise.all([
+      prisma.ipAsset.count({
+        where: { assignments: { none: { status: "SIGNED" } } },
+      }),
+      prisma.person.count({
+        where: {
+          deletedAt: null,
+          assignments: { none: { status: "SIGNED" } },
+        },
+      }),
+      prisma.person.count({
+        where: {
+          deletedAt: null,
+          endDate: null,
+          assignments: { none: { status: "SIGNED" } },
+        },
+      }),
+      getAssetsWithGaps(limit),
+      getPeopleWithGaps(limit),
+    ]);
 
   return {
-    assetsAtRisk: assetsAtRisk.length,
-    peopleWithoutAgreements: peopleWithGaps.length,
-    highPriorityPeople: peopleWithGaps.filter((p) => p.priority === "HIGH").length,
-    assets: assetsAtRisk,
-    people: peopleWithGaps,
+    assetsAtRisk: assetsAtRiskCount,
+    peopleWithoutAgreements: peopleWithGapsCount,
+    highPriorityPeople: highPriorityCount,
+    assets,
+    people,
   };
 }

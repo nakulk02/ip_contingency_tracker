@@ -5,14 +5,8 @@ import { useParams } from "next/navigation";
 import { AssignmentForm } from "@/components/assignments/assignment-form";
 
 interface Assignment {
-  id: string;
-  personId: string;
-  ipAssetId: string | null;
-  scope: string;
-  signedDate: string | null;
-  fileReference: string | null;
-  status: string;
-  notes: string | null;
+  id: string; personId: string; ipAssetId: string | null; scope: string;
+  signedDate: string | null; fileReference: string | null; status: string; notes: string | null;
 }
 
 export default function EditAssignmentPage() {
@@ -22,36 +16,25 @@ export default function EditAssignmentPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    async function fetchAssignment() {
-      const res = await fetch(`/api/assignments/${params.id}`);
-      if (res.ok) {
-        const data = await res.json();
-        setAssignment(data.data);
-      } else {
-        setError("Assignment not found");
-      }
-      setLoading(false);
-    }
-    fetchAssignment();
+    const controller = new AbortController();
+    (async () => {
+      try {
+        const res = await fetch(`/api/v1/assignments/${params.id}`, { signal: controller.signal });
+        if (res.ok) { setAssignment((await res.json()).data); }
+        else { setError("Assignment not found"); }
+      } catch (e) { if (e instanceof Error && e.name !== "AbortError") setError("Failed to load"); }
+      finally { setLoading(false); }
+    })();
+    return () => controller.abort();
   }, [params.id]);
 
-  if (loading) {
-    return (
-      <div className="space-y-6">
-        <div className="h-8 w-48 bg-muted rounded animate-pulse" />
-        <div className="h-96 bg-muted rounded-xl animate-pulse" />
-      </div>
-    );
-  }
+  if (loading) return (<div className="space-y-6"><div className="h-8 w-48 bg-muted rounded animate-pulse" /><div className="h-96 bg-muted rounded-xl animate-pulse" /></div>);
   if (error) return <div className="text-destructive">{error}</div>;
   if (!assignment) return null;
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Edit Assignment</h1>
-        <p className="text-muted-foreground mt-1">Update assignment details</p>
-      </div>
+      <div><h1 className="text-3xl font-bold tracking-tight">Edit Assignment</h1><p className="text-muted-foreground mt-1">Update assignment details</p></div>
       <AssignmentForm initialData={assignment} />
     </div>
   );

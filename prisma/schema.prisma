@@ -25,6 +25,8 @@ model Note {
   updatedAt DateTime @updatedAt
   userId    String
   user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }
 
 // --- Stage 2: IP Assets + People ---
@@ -62,18 +64,25 @@ model IpAsset {
   createdAt          DateTime              @default(now())
   updatedAt          DateTime              @updatedAt
   assignments        AssignmentAgreement[]
+
+  @@index([type])
+  @@index([status])
 }
 
 model Person {
   id          String                @id @default(cuid())
   name        String
-  email       String?
+  email       String?               @unique
   role        PersonRole
   startDate   DateTime
   endDate     DateTime?
+  deletedAt   DateTime?
   createdAt   DateTime              @default(now())
   updatedAt   DateTime              @updatedAt
   assignments AssignmentAgreement[]
+
+  @@index([role])
+  @@index([deletedAt])
 }
 
 // --- Stage 3: Assignments ---
@@ -92,7 +101,7 @@ enum AgreementScope {
 model AssignmentAgreement {
   id            String          @id @default(cuid())
   personId      String
-  person        Person          @relation(fields: [personId], references: [id], onDelete: Cascade)
+  person        Person          @relation(fields: [personId], references: [id], onDelete: Restrict)
   ipAssetId     String?
   ipAsset       IpAsset?        @relation(fields: [ipAssetId], references: [id], onDelete: SetNull)
   scope         AgreementScope  @default(COMPANY_WIDE)
@@ -102,4 +111,8 @@ model AssignmentAgreement {
   notes         String?
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
+
+  @@index([personId])
+  @@index([ipAssetId])
+  @@index([status])
 }

@@ -80,7 +80,7 @@ export default function RegisterPage() {
           <Label htmlFor="password">Password</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input id="password" name="password" type="password" required minLength={6} placeholder="Min. 6 characters" className="pl-10" />
+            <Input id="password" name="password" type="password" required minLength={8} placeholder="Min. 8 characters" className="pl-10" />
           </div>
         </div>
         <Button type="submit" disabled={loading} className="w-full h-11 text-base">

@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getSessionOrUnauthorized } from "@/lib/auth-utils";
 import { handleApiError } from "@/lib/api-utils";
 import { rateLimit } from "@/lib/rate-limit";
+import { updateAssignmentWithAudit, deleteAssignmentWithAudit } from "@/lib/transaction-helper";
 
 const updateAssignmentSchema = z.object({
   personId: z.string().min(1).optional(),
@@ -13,6 +14,7 @@ const updateAssignmentSchema = z.object({
   fileReference: z.string().nullable().optional(),
   status: z.enum(["SIGNED", "MISSING", "PENDING"]).optional(),
   notes: z.string().nullable().optional(),
+  reason: z.string().optional(), // Optional audit reason
 });
 
 export async function GET(
@@ -48,30 +50,41 @@ export async function PUT(
   const limited = await rateLimit(req);
   if (limited) return limited;
 
-  const { error } = await getSessionOrUnauthorized();
+  const { session, error } = await getSessionOrUnauthorized();
   if (error) return error;
 
   const { id } = await params;
 
   try {
     const body = await req.json();
-    const data = updateAssignmentSchema.parse(body);
+    const { reason, ...data } = updateAssignmentSchema.parse(body);
 
-    const updateData: Record<string, unknown> = { ...data };
+    const updateInput: Record<string, any> = {
+      id,
+      ...data,
+    };
+
     if (data.signedDate !== undefined) {
-      updateData.signedDate = data.signedDate ? new Date(data.signedDate) : null;
+      updateInput.signedDate = data.signedDate ? new Date(data.signedDate) : null;
     }
 
-    const assignment = await prisma.assignmentAgreement.update({
-      where: { id },
-      data: updateData,
+    const assignment = await updateAssignmentWithAudit(updateInput, {
+      userId: session!.user!.id,
+      userName: session!.user!.name || "Unknown",
+      userEmail: session!.user!.email || "unknown@example.com",
+      reason,
+    });
+
+    // Fetch full assignment with relations for response
+    const fullAssignment = await prisma.assignmentAgreement.findUnique({
+      where: { id: assignment.id },
       include: {
         person: { select: { id: true, name: true } },
         ipAsset: { select: { id: true, title: true } },
       },
     });
 
-    return NextResponse.json({ data: assignment });
+    return NextResponse.json({ data: fullAssignment });
   } catch (err) {
     return handleApiError(err);
   }
@@ -84,15 +97,24 @@ export async function DELETE(
   const limited = await rateLimit(req);
   if (limited) return limited;
 
-  const { error } = await getSessionOrUnauthorized();
+  const { session, error } = await getSessionOrUnauthorized();
   if (error) return error;
 
   const { id } = await params;
 
   try {
-    await prisma.assignmentAgreement.delete({ where: { id } });
+    const body = await req.json().catch(() => ({}));
+    const reason = body?.reason || undefined;
+
+    await deleteAssignmentWithAudit(id, {
+      userId: session!.user!.id,
+      userName: session!.user!.name || "Unknown",
+      userEmail: session!.user!.email || "unknown@example.com",
+      reason,
+    });
+
     return NextResponse.json({ data: { success: true } });
-  } catch {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  } catch (err) {
+    return handleApiError(err);
   }
 }

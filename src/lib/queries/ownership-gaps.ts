@@ -1,44 +1,41 @@
 import { prisma } from "@/lib/prisma";
 import { calculateAssetRiskScore, calculatePersonRiskScore } from "@/lib/risk-scoring";
 
-export async function getAssetsWithGaps(limit?: number) {
-  const assets = await prisma.ipAsset.findMany({
-    where: {
-      assignments: { none: { status: "SIGNED" } },
-    },
-    orderBy: { title: "asc" },
-    ...(limit ? { take: limit } : {}),
-  });
+export async function getOwnershipGapSummary(limit = 5) {
+  // Fetch all gaps in parallel (2 queries instead of 5)
+  const [allAssets, allPeople] = await Promise.all([
+    prisma.ipAsset.findMany({
+      where: {
+        assignments: { none: { status: "SIGNED" } },
+      },
+      orderBy: { title: "asc" },
+    }),
+    prisma.person.findMany({
+      where: {
+        deletedAt: null,
+        assignments: { none: { status: "SIGNED" } },
+      },
+      orderBy: { name: "asc" },
+    }),
+  ]);
 
-  return assets.map((asset) => {
+  // Calculate counts and add risk scores in memory
+  const assets = allAssets.slice(0, limit).map((asset) => {
     const riskData = calculateAssetRiskScore(
       asset.type,
       asset.status,
       asset.filingDate,
       asset.jurisdiction
     );
-
     return {
       ...asset,
       riskScore: riskData.score,
       riskLevel: riskData.level,
     };
   });
-}
 
-export async function getPeopleWithGaps(limit?: number) {
-  const people = await prisma.person.findMany({
-    where: {
-      deletedAt: null,
-      assignments: { none: { status: "SIGNED" } },
-    },
-    orderBy: { name: "asc" },
-    ...(limit ? { take: limit } : {}),
-  });
-
-  return people.map((p) => {
+  const people = allPeople.map((p) => {
     const riskData = calculatePersonRiskScore(p.startDate, p.endDate);
-
     return {
       ...p,
       riskScore: riskData.score,
@@ -46,36 +43,14 @@ export async function getPeopleWithGaps(limit?: number) {
       priority: p.endDate === null ? ("HIGH" as const) : ("MEDIUM" as const),
     };
   });
-}
 
-export async function getOwnershipGapSummary(limit = 5) {
-  const [assetsAtRiskCount, peopleWithGapsCount, highPriorityCount, assets, people] =
-    await Promise.all([
-      prisma.ipAsset.count({
-        where: { assignments: { none: { status: "SIGNED" } } },
-      }),
-      prisma.person.count({
-        where: {
-          deletedAt: null,
-          assignments: { none: { status: "SIGNED" } },
-        },
-      }),
-      prisma.person.count({
-        where: {
-          deletedAt: null,
-          endDate: null,
-          assignments: { none: { status: "SIGNED" } },
-        },
-      }),
-      getAssetsWithGaps(limit),
-      getPeopleWithGaps(limit),
-    ]);
+  const highPriorityPeople = people.filter((p) => p.endDate === null);
 
   return {
-    assetsAtRisk: assetsAtRiskCount,
-    peopleWithoutAgreements: peopleWithGapsCount,
-    highPriorityPeople: highPriorityCount,
-    assets,
-    people,
+    assetsAtRisk: allAssets.length,
+    peopleWithoutAgreements: allPeople.length,
+    highPriorityPeople: highPriorityPeople.length,
+    assets: assets.slice(0, limit),
+    people: people.slice(0, limit),
   };
 }

@@ -16,8 +16,8 @@ interface GapData {
   assetsAtRisk: number;
   peopleWithoutAgreements: number;
   highPriorityPeople: number;
-  assets: Array<{ id: string; title: string; type: string; jurisdiction: string; status: string }>;
-  people: Array<{ id: string; name: string; role: string; email: string | null; endDate: string | null; priority: string }>;
+  assets: Array<{ id: string; title: string; type: string; jurisdiction: string; status: string; riskScore: number; riskLevel: string }>;
+  people: Array<{ id: string; name: string; role: string; email: string | null; endDate: string | null; priority: string; riskScore: number; riskLevel: string }>;
 }
 
 const statusColors: Record<string, string> = {
@@ -28,6 +28,12 @@ const statusColors: Record<string, string> = {
 const roleColors: Record<string, string> = {
   FOUNDER: "bg-purple-100 text-purple-700", EMPLOYEE: "bg-blue-100 text-blue-700",
   CONTRACTOR: "bg-amber-100 text-amber-700", ADVISOR: "bg-emerald-100 text-emerald-700",
+};
+const riskLevelColors: Record<string, string> = {
+  CRITICAL: "bg-red-100 text-red-700",
+  HIGH: "bg-orange-100 text-orange-700",
+  MEDIUM: "bg-yellow-100 text-yellow-700",
+  LOW: "bg-emerald-100 text-emerald-700",
 };
 
 export default function DashboardPage() {
@@ -137,12 +143,13 @@ export default function DashboardPage() {
                 <Shield className="w-8 h-8 mx-auto mb-2 text-emerald-400" /><p className="text-sm font-medium">All assets covered</p>
               </div>
             ) : (
-              <Table><TableHeader><TableRow><TableHead>Title</TableHead><TableHead>Type</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
+              <Table><TableHeader><TableRow><TableHead>Title</TableHead><TableHead>Type</TableHead><TableHead>Status</TableHead><TableHead>Risk</TableHead></TableRow></TableHeader>
                 <TableBody>{gaps.assets.map((asset) => (
                   <TableRow key={asset.id}>
                     <TableCell><Link href={`/ip-assets/${asset.id}`} className="text-primary hover:underline font-medium text-sm">{asset.title}</Link></TableCell>
                     <TableCell className="text-sm">{asset.type}</TableCell>
                     <TableCell><span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${statusColors[asset.status] || ""}`}>{asset.status}</span></TableCell>
+                    <TableCell><span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${riskLevelColors[asset.riskLevel] || ""}`}>{asset.riskLevel} ({asset.riskScore})</span></TableCell>
                   </TableRow>
                 ))}</TableBody>
               </Table>
@@ -164,12 +171,13 @@ export default function DashboardPage() {
                 <Users className="w-8 h-8 mx-auto mb-2 text-emerald-400" /><p className="text-sm font-medium">Everyone has agreements</p>
               </div>
             ) : (
-              <Table><TableHeader><TableRow><TableHead>Name</TableHead><TableHead>Role</TableHead><TableHead>Priority</TableHead></TableRow></TableHeader>
+              <Table><TableHeader><TableRow><TableHead>Name</TableHead><TableHead>Role</TableHead><TableHead>Priority</TableHead><TableHead>Risk</TableHead></TableRow></TableHeader>
                 <TableBody>{gaps.people.map((person) => (
                   <TableRow key={person.id}>
                     <TableCell><Link href={`/people/${person.id}`} className="text-primary hover:underline font-medium text-sm">{person.name}</Link></TableCell>
                     <TableCell><span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${roleColors[person.role] || ""}`}>{person.role}</span></TableCell>
                     <TableCell><span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${person.priority === "HIGH" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}>{person.priority}</span></TableCell>
+                    <TableCell><span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${riskLevelColors[person.riskLevel] || ""}`}>{person.riskLevel} ({person.riskScore})</span></TableCell>
                   </TableRow>
                 ))}</TableBody>
               </Table>

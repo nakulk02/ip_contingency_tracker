@@ -1,12 +1,28 @@
 import { prisma } from "@/lib/prisma";
+import { calculateAssetRiskScore, calculatePersonRiskScore } from "@/lib/risk-scoring";
 
 export async function getAssetsWithGaps(limit?: number) {
-  return prisma.ipAsset.findMany({
+  const assets = await prisma.ipAsset.findMany({
     where: {
       assignments: { none: { status: "SIGNED" } },
     },
     orderBy: { title: "asc" },
     ...(limit ? { take: limit } : {}),
+  });
+
+  return assets.map((asset) => {
+    const riskData = calculateAssetRiskScore(
+      asset.type,
+      asset.status,
+      asset.filingDate,
+      asset.jurisdiction
+    );
+
+    return {
+      ...asset,
+      riskScore: riskData.score,
+      riskLevel: riskData.level,
+    };
   });
 }
 
@@ -20,10 +36,16 @@ export async function getPeopleWithGaps(limit?: number) {
     ...(limit ? { take: limit } : {}),
   });
 
-  return people.map((p) => ({
-    ...p,
-    priority: p.endDate === null ? ("HIGH" as const) : ("MEDIUM" as const),
-  }));
+  return people.map((p) => {
+    const riskData = calculatePersonRiskScore(p.startDate, p.endDate);
+
+    return {
+      ...p,
+      riskScore: riskData.score,
+      riskLevel: riskData.level,
+      priority: p.endDate === null ? ("HIGH" as const) : ("MEDIUM" as const),
+    };
+  });
 }
 
 export async function getOwnershipGapSummary(limit = 5) {

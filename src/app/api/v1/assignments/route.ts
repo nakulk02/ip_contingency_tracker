@@ -5,6 +5,7 @@ import { getSessionOrUnauthorized } from "@/lib/auth-utils";
 import { parsePagination, paginatedResponse, handleApiError } from "@/lib/api-utils";
 import { rateLimit } from "@/lib/rate-limit";
 import { createAssignmentWithAudit } from "@/lib/transaction-helper";
+import { canCreateAssignment } from "@/lib/jurisdiction-compliance";
 
 const VALID_STATUSES = ["SIGNED", "MISSING", "PENDING"] as const;
 
@@ -16,7 +17,8 @@ const createAssignmentSchema = z.object({
   fileReference: z.string().nullable().optional(),
   status: z.enum(VALID_STATUSES).optional(),
   notes: z.string().nullable().optional(),
-  reason: z.string().optional(), // Optional audit reason
+  reason: z.string().optional(),
+  skipComplianceCheck: z.boolean().optional().default(false), // Allow override
 });
 
 export async function GET(req: Request) {
@@ -29,7 +31,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const { page, limit, skip } = parsePagination(req);
 
-  const where: Record<string, string> = {};
+  const where: Record<string, any> = { deletedAt: null };
   const statusParam = searchParams.get("status");
   const personIdParam = searchParams.get("personId");
   if (statusParam && (VALID_STATUSES as readonly string[]).includes(statusParam)) where.status = statusParam;
@@ -61,7 +63,33 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const { reason, ...data } = createAssignmentSchema.parse(body);
+    const { reason, skipComplianceCheck, ...data } = createAssignmentSchema.parse(body);
+
+    // Validate jurisdiction compliance if asset is specified
+    if (data.ipAssetId && !skipComplianceCheck) {
+      const asset = await prisma.ipAsset.findUnique({
+        where: { id: data.ipAssetId },
+      });
+
+      if (asset) {
+        const { allowed, reason: complianceReason } = canCreateAssignment(
+          asset.jurisdiction,
+          asset.type as "PATENT" | "TRADEMARK",
+          asset.status
+        );
+
+        if (!allowed) {
+          return NextResponse.json(
+            {
+              error: "Compliance violation",
+              message: complianceReason,
+              hint: "Add skipComplianceCheck: true to override (not recommended)",
+            },
+            { status: 400 }
+          );
+        }
+      }
+    }
 
     const assignment = await createAssignmentWithAudit(
       {

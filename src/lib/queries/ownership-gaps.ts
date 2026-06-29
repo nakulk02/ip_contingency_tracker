@@ -6,14 +6,28 @@ export async function getOwnershipGapSummary(limit = 5) {
   const [allAssets, allPeople] = await Promise.all([
     prisma.ipAsset.findMany({
       where: {
-        assignments: { none: { status: "SIGNED" } },
+        assignments: { 
+          none: { 
+            AND: [
+              { status: "SIGNED" },
+              { deletedAt: null }
+            ]
+          } 
+        },
       },
       orderBy: { title: "asc" },
     }),
     prisma.person.findMany({
       where: {
         deletedAt: null,
-        assignments: { none: { status: "SIGNED" } },
+        assignments: { 
+          none: { 
+            AND: [
+              { status: "SIGNED" },
+              { deletedAt: null }
+            ]
+          }
+        },
       },
       orderBy: { name: "asc" },
     }),

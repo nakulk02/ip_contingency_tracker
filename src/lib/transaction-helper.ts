@@ -180,7 +180,7 @@ export async function updateAssignmentWithAudit(
 }
 
 /**
- * Delete an assignment with audit logging in a transaction
+ * Delete an assignment with audit logging in a transaction (soft delete)
  */
 export async function deleteAssignmentWithAudit(
   assignmentId: string,
@@ -192,9 +192,10 @@ export async function deleteAssignmentWithAudit(
       where: { id: assignmentId },
     });
 
-    // Delete the assignment
-    const deletedAssignment = await tx.assignmentAgreement.delete({
+    // Soft delete the assignment
+    const deletedAssignment = await tx.assignmentAgreement.update({
       where: { id: assignmentId },
+      data: { deletedAt: new Date() },
     });
 
     // Log the deletion

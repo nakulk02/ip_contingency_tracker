@@ -111,11 +111,13 @@ model AssignmentAgreement {
   notes         String?
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
+  deletedAt     DateTime?       // Soft delete
   auditLogs     AuditLog[]
 
   @@index([personId])
   @@index([ipAssetId])
   @@index([status])
+  @@index([deletedAt])
 }
 
 // --- Audit Log for Compliance ---

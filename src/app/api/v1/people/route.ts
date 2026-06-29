@@ -25,9 +25,43 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const { page, limit, skip } = parsePagination(req);
 
-  const where: Record<string, unknown> = { deletedAt: null };
+  const where: Record<string, any> = { deletedAt: null };
+  
+  // Role filter
   const roleParam = searchParams.get("role");
   if (roleParam && (VALID_ROLES as readonly string[]).includes(roleParam)) where.role = roleParam;
+  
+  // Status filter (current or former)
+  const statusParam = searchParams.get("status");
+  if (statusParam === "current") {
+    where.endDate = null;
+  } else if (statusParam === "former") {
+    where.endDate = { not: null };
+  }
+  
+  // Gaps only filter (no signed assignments)
+  const gapsOnlyParam = searchParams.get("gapsOnly");
+  if (gapsOnlyParam === "true") {
+    where.assignments = { none: { status: "SIGNED" } };
+  }
+  
+  // Start date range filter
+  const startDateFrom = searchParams.get("startDateFrom");
+  const startDateTo = searchParams.get("startDateTo");
+  if (startDateFrom || startDateTo) {
+    where.startDate = {};
+    if (startDateFrom) where.startDate.gte = new Date(startDateFrom);
+    if (startDateTo) where.startDate.lte = new Date(startDateTo);
+  }
+  
+  // End date range filter
+  const endDateFrom = searchParams.get("endDateFrom");
+  const endDateTo = searchParams.get("endDateTo");
+  if (endDateFrom || endDateTo) {
+    where.endDate = where.endDate || {};
+    if (endDateFrom) where.endDate.gte = new Date(endDateFrom);
+    if (endDateTo) where.endDate.lte = new Date(endDateTo);
+  }
 
   const [people, total] = await Promise.all([
     prisma.person.findMany({

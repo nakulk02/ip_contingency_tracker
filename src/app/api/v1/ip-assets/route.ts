@@ -28,11 +28,34 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const { page, limit, skip } = parsePagination(req);
 
-  const where: Record<string, string> = {};
+  const where: Record<string, any> = {};
+  
+  // Type filter
   const typeParam = searchParams.get("type");
-  const statusParam = searchParams.get("status");
   if (typeParam && (VALID_TYPES as readonly string[]).includes(typeParam)) where.type = typeParam;
+  
+  // Status filter
+  const statusParam = searchParams.get("status");
   if (statusParam && (VALID_STATUSES as readonly string[]).includes(statusParam)) where.status = statusParam;
+  
+  // Jurisdiction filter
+  const jurisdictionParam = searchParams.get("jurisdiction");
+  if (jurisdictionParam) where.jurisdiction = jurisdictionParam.toUpperCase();
+  
+  // Gaps only filter (no signed assignments)
+  const gapsOnlyParam = searchParams.get("gapsOnly");
+  if (gapsOnlyParam === "true") {
+    where.assignments = { none: { status: "SIGNED" } };
+  }
+  
+  // Filing date range filter
+  const filingDateFrom = searchParams.get("filingDateFrom");
+  const filingDateTo = searchParams.get("filingDateTo");
+  if (filingDateFrom || filingDateTo) {
+    where.filingDate = {};
+    if (filingDateFrom) where.filingDate.gte = new Date(filingDateFrom);
+    if (filingDateTo) where.filingDate.lte = new Date(filingDateTo);
+  }
 
   const [assets, total] = await Promise.all([
     prisma.ipAsset.findMany({

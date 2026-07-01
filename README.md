@@ -77,6 +77,8 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+Interactive API documentation is available at [http://localhost:3000/api-docs](http://localhost:3000/api-docs) once you're signed in — it's generated from the actual request validation schemas, so it stays in sync with the code.
+
 ### Demo Credentials
 
 After seeding, you can log in with:

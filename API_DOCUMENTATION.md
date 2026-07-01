@@ -1,6 +1,13 @@
 /**
  * API DOCUMENTATION
- * 
+ *
+ * For interactive, always-up-to-date documentation (generated from the
+ * actual Zod validation schemas), run the app and visit /api-docs.
+ * The raw OpenAPI 3.1 spec is served as JSON at /api/openapi.
+ *
+ * This file is kept as a quick grep-able reference; the interactive
+ * docs are the source of truth for request/response shapes.
+ *
  * DEPRECATED ENDPOINTS (to be removed in v2):
  * - GET/POST /api/people (use /api/v1/people)
  * - GET/PUT/DELETE /api/people/[id] (use /api/v1/people/[id])
@@ -10,7 +17,7 @@
  * - GET /api/dashboard/ownership-gaps (use /api/v1/dashboard/ownership-gaps)
  * - GET/POST /api/notes (use /api/v1/notes)
  * - GET/PUT/DELETE /api/notes/[id] (use /api/v1/notes/[id])
- * 
+ *
  * CURRENT API (v1):
  * 
  * ============ PEOPLE ============
@@ -58,7 +65,17 @@
  * GET    /api/v1/notes/[id]
  * PUT    /api/v1/notes/[id]
  * DELETE /api/v1/notes/[id]
- * 
+ *
+ * ============ INTELLIGENCE ============
+ * GET    /api/v1/intelligence/analyze-gaps
+ * GET    /api/v1/intelligence/advisory
+ * GET    /api/v1/intelligence/anomalies
+ * GET    /api/v1/intelligence/priorities
+ * GET    /api/v1/intelligence/compliance?gapId=ID
+ * GET    /api/v1/intelligence/predict?gapId=ID
+ * GET    /api/v1/intelligence/recommendations?gapId=ID
+ * POST   /api/v1/intelligence/query (body: { question })
+ *
  * ============ AUTH ============
  * POST   /api/auth/register
  * GET    /api/auth/session

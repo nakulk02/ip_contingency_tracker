@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionOrUnauthorized } from "@/lib/auth-utils";
+import { asyncHandler } from "@/lib/api-utils";
 import { rateLimit } from "@/lib/rate-limit";
 import {
   findOverdueAssignments,
@@ -10,38 +11,33 @@ import {
 /**
  * GET /api/v1/notifications/overdue?thresholdDays=30
  * Get list of overdue IP assignments
- * 
+ *
  * Used by background jobs, dashboards, or manual checks
  */
-export async function GET(req: Request) {
+export const GET = asyncHandler(async (req: Request) => {
   const limited = await rateLimit(req);
   if (limited) return limited;
 
   const { error } = await getSessionOrUnauthorized();
   if (error) return error;
 
-  try {
-    const { searchParams } = new URL(req.url);
-    const thresholdDays = parseInt(searchParams.get("thresholdDays") || "30", 10);
+  const { searchParams } = new URL(req.url);
+  const thresholdDays = parseInt(searchParams.get("thresholdDays") || "30", 10);
 
-    const overdue = await findOverdueAssignments(thresholdDays);
-    const byPerson = await getOverdueByPerson(thresholdDays);
-    const violations = await getCriticalComplianceViolations();
+  const overdue = await findOverdueAssignments(thresholdDays);
+  const byPerson = await getOverdueByPerson(thresholdDays);
+  const criticalViolations = await getCriticalComplianceViolations();
 
-    return NextResponse.json({
-      data: {
-        summary: {
-          totalOverdue: overdue.length,
-          affectedPeople: byPerson.length,
-          criticalViolations: violations.length,
-        },
-        overdue,
-        byPerson,
-        criticalViolations,
+  return NextResponse.json({
+    data: {
+      summary: {
+        totalOverdue: overdue.length,
+        affectedPeople: byPerson.length,
+        criticalViolations: criticalViolations.length,
       },
-    });
-  } catch (err) {
-    console.error("[Notifications Error]", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-  }
-}
+      overdue,
+      byPerson,
+      criticalViolations,
+    },
+  });
+});

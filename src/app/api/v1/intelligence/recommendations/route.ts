@@ -1,62 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import { processTool } from "ip-contingency-mcp";
-import { prisma } from "@/lib/prisma";
+import { getSessionOrUnauthorized } from "@/lib/auth-utils";
+import { asyncHandler } from "@/lib/api-utils";
+import { rateLimit } from "@/lib/rate-limit";
+import { getFormattedGap } from "@/lib/queries/intelligence-gaps";
+import { ValidationError } from "@/lib/errors";
 
-export async function GET(req: NextRequest) {
-  try {
-    const gapId = req.nextUrl.searchParams.get("gapId");
+export const GET = asyncHandler(async (req: NextRequest) => {
+  const limited = await rateLimit(req);
+  if (limited) return limited;
 
-    if (!gapId) {
-      return NextResponse.json(
-        { error: "gapId parameter required" },
-        { status: 400 }
-      );
-    }
+  const { error } = await getSessionOrUnauthorized();
+  if (error) return error;
 
-    const gap = await prisma.assignmentAgreement.findUnique({
-      where: { id: gapId },
-      include: {
-        person: true,
-        ipAsset: true,
-      },
-    });
-
-    if (!gap) {
-      return NextResponse.json(
-        { error: "Gap not found" },
-        { status: 404 }
-      );
-    }
-
-    const formattedGap = {
-      id: gap.id,
-      personId: gap.personId,
-      personName: gap.person.name,
-      personEmail: gap.person.email,
-      personRole: gap.person.role,
-      personStartDate: gap.person.startDate,
-      personEndDate: gap.person.endDate,
-      assetId: gap.ipAssetId,
-      assetTitle: gap.ipAsset?.title,
-      assetType: gap.ipAsset?.type || "PATENT",
-      assetStatus: gap.ipAsset?.status || "DRAFT",
-      jurisdiction: gap.ipAsset?.jurisdiction || "US",
-      filingDate: gap.ipAsset?.filingDate,
-      riskScore: 50,
-      riskLevel: "MEDIUM" as const,
-      daysOverdue: 0,
-    };
-
-    const result = await processTool({
-      tool: "recommendActions",
-      input: { gap: formattedGap },
-    });
-
-    return NextResponse.json(result);
-  } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Recommendation failed" },
-      { status: 500 }
-    );
+  const gapId = req.nextUrl.searchParams.get("gapId");
+  if (!gapId) {
+    throw new ValidationError("gapId parameter required");
   }
-}
+
+  const formattedGap = await getFormattedGap(gapId);
+
+  const result = await processTool({
+    tool: "recommendActions",
+    input: { gap: formattedGap },
+  });
+
+  return NextResponse.json(result);
+});

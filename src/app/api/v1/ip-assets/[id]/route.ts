@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSessionOrUnauthorized } from "@/lib/auth-utils";
-import { handleApiError } from "@/lib/api-utils";
+import { asyncHandler } from "@/lib/api-utils";
+import { NotFoundError } from "@/lib/errors";
 import { rateLimit } from "@/lib/rate-limit";
 
 const updateIpAssetSchema = z.object({
@@ -15,39 +16,34 @@ const updateIpAssetSchema = z.object({
   description: z.string().nullable().optional(),
 });
 
-export async function GET(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const limited = await rateLimit(req);
-  if (limited) return limited;
+export const GET = asyncHandler(
+  async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
+    const limited = await rateLimit(req);
+    if (limited) return limited;
 
-  const { error } = await getSessionOrUnauthorized();
-  if (error) return error;
+    const { error } = await getSessionOrUnauthorized();
+    if (error) return error;
 
-  const { id } = await params;
-  const asset = await prisma.ipAsset.findUnique({ where: { id } });
+    const { id } = await params;
+    const asset = await prisma.ipAsset.findUnique({ where: { id } });
 
-  if (!asset) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+    if (!asset) {
+      throw new NotFoundError("IP asset");
+    }
+
+    return NextResponse.json({ data: asset });
   }
+);
 
-  return NextResponse.json({ data: asset });
-}
+export const PUT = asyncHandler(
+  async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
+    const limited = await rateLimit(req);
+    if (limited) return limited;
 
-export async function PUT(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const limited = await rateLimit(req);
-  if (limited) return limited;
+    const { error } = await getSessionOrUnauthorized();
+    if (error) return error;
 
-  const { error } = await getSessionOrUnauthorized();
-  if (error) return error;
-
-  const { id } = await params;
-
-  try {
+    const { id } = await params;
     const body = await req.json();
     const data = updateIpAssetSchema.parse(body);
 
@@ -62,27 +58,20 @@ export async function PUT(
     });
 
     return NextResponse.json({ data: asset });
-  } catch (err) {
-    return handleApiError(err);
   }
-}
+);
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const limited = await rateLimit(req);
-  if (limited) return limited;
+export const DELETE = asyncHandler(
+  async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
+    const limited = await rateLimit(req);
+    if (limited) return limited;
 
-  const { error } = await getSessionOrUnauthorized();
-  if (error) return error;
+    const { error } = await getSessionOrUnauthorized();
+    if (error) return error;
 
-  const { id } = await params;
-
-  try {
+    const { id } = await params;
     await prisma.ipAsset.delete({ where: { id } });
+
     return NextResponse.json({ data: { success: true } });
-  } catch {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
-}
+);

@@ -13,6 +13,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "seed": "prisma db seed",
+    "db:reset": "prisma migrate reset",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -23,7 +25,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^17.4.2",
     "ioredis": "^5.11.1",
-    "ip-contingency-mcp": "github:nakulk02/ip-contingency-mcp",
+    "ip-contingency-mcp": "github:nakulk02/ip_contingency_mcp",
     "lucide-react": "^1.21.0",
     "next": "16.2.9",
     "next-auth": "^4.24.14",

@@ -25,11 +25,26 @@ async function main() {
 
   // Create sample notes
   const notes = [
-    { title: "Patent Filing Checklist", body: "1. Prior art search\n2. Draft claims\n3. File provisional\n4. Review and revise\n5. File non-provisional" },
-    { title: "Trademark Review Q3", body: "Review all active trademarks for renewal deadlines in Q3. Check jurisdictions: US, EU, JP." },
-    { title: "Contractor IP Agreement Template", body: "Need to update the standard contractor IP assignment template to include new clauses for AI-generated works." },
-    { title: "Meeting Notes - IP Strategy", body: "Discussed filing strategy for new product line. Priority markets: US, EU, CN. Budget approved for 3 new patent applications." },
-    { title: "Deadline: US Patent Maintenance Fee", body: "Maintenance fee due for US Patent #10,XXX,XXX. Window opens Jan 2027. Set reminder for Nov 2026." },
+    {
+      title: "Patent Filing Checklist",
+      body: "1. Prior art search\n2. Draft claims\n3. File provisional\n4. Review and revise\n5. File non-provisional",
+    },
+    {
+      title: "Trademark Review Q3",
+      body: "Review all active trademarks for renewal deadlines in Q3. Check jurisdictions: US, EU, JP.",
+    },
+    {
+      title: "Contractor IP Agreement Template",
+      body: "Need to update the standard contractor IP assignment template to include new clauses for AI-generated works.",
+    },
+    {
+      title: "Meeting Notes - IP Strategy",
+      body: "Discussed filing strategy for new product line. Priority markets: US, EU, CN. Budget approved for 3 new patent applications.",
+    },
+    {
+      title: "Deadline: US Patent Maintenance Fee",
+      body: "Maintenance fee due for US Patent #10,XXX,XXX. Window opens Jan 2027. Set reminder for Nov 2026.",
+    },
   ];
 
   for (const note of notes) {
@@ -48,7 +63,8 @@ async function main() {
         jurisdiction: "US",
         filingDate: new Date("2025-07-15"),
         status: "FILED",
-        description: "Method and system for automatically identifying intellectual property ownership gaps and deadline risks using structured data analysis.",
+        description:
+          "Method and system for automatically identifying intellectual property ownership gaps and deadline risks using structured data analysis.",
       },
     }),
     prisma.ipAsset.create({
@@ -58,7 +74,8 @@ async function main() {
         jurisdiction: "US",
         filingDate: new Date("2025-03-01"),
         status: "PUBLISHED",
-        description: "A distributed ledger system for tracking chain of ownership and assignment history for intellectual property assets.",
+        description:
+          "A distributed ledger system for tracking chain of ownership and assignment history for intellectual property assets.",
       },
     }),
     prisma.ipAsset.create({
@@ -67,7 +84,8 @@ async function main() {
         title: "AI-Powered Prior Art Search Engine",
         jurisdiction: "EU",
         status: "DRAFT",
-        description: "Machine learning model trained on patent databases to surface relevant prior art during the patent drafting process.",
+        description:
+          "Machine learning model trained on patent databases to surface relevant prior art during the patent drafting process.",
       },
     }),
     prisma.ipAsset.create({
@@ -88,7 +106,8 @@ async function main() {
         jurisdiction: "EU",
         filingDate: new Date("2025-01-10"),
         status: "FILED",
-        description: "Figurative mark — shield icon with interlocking IP letters. Used on product packaging and marketing materials.",
+        description:
+          "Figurative mark — shield icon with interlocking IP letters. Used on product packaging and marketing materials.",
       },
     }),
     prisma.ipAsset.create({
@@ -98,7 +117,8 @@ async function main() {
         jurisdiction: "JP",
         filingDate: new Date("2026-02-28"),
         status: "FILED",
-        description: "Word mark for IP monitoring and alerting service targeting the Japanese market.",
+        description:
+          "Word mark for IP monitoring and alerting service targeting the Japanese market.",
       },
     }),
   ]);
@@ -204,7 +224,8 @@ async function main() {
       personId: people[5].id, // Michael - advisor, missing
       scope: "COMPANY_WIDE" as const,
       status: "MISSING" as const,
-      notes: "Need to prepare advisor IP agreement. Low priority as advisory role is non-technical.",
+      notes:
+        "Need to prepare advisor IP agreement. Low priority as advisory role is non-technical.",
     },
   ];
   // Sam Rivera (people[3]) and Lisa Park (people[6]) have NO assignments at all — they should show as gaps

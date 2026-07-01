@@ -56,12 +56,18 @@ NEXTAUTH_SECRET="your-secret-here"
 NEXTAUTH_URL="http://localhost:3000"
 ```
 
+`ANTHROPIC_API_KEY` is also required if you want the Intelligence routes (`/api/v1/intelligence/*`) to work, since they call out to Claude via the `ip-contingency-mcp` package. `LOG_LEVEL` and `REDIS_URL` are optional — see `.env.example` for details.
+
+Required environment variables are validated on startup; if something's missing or malformed, you'll get a clear error listing exactly what to fix instead of a confusing runtime failure.
+
 ### 3. Run database migrations and seed
 
 ```bash
 npx prisma migrate deploy
-npx prisma db seed
+npm run seed
 ```
+
+The seed script wipes and repopulates IP assets, people, and assignment agreements — safe to re-run any time you want a clean demo dataset. To also reset migrations from scratch, use `npm run db:reset` instead (this drops and recreates the database).
 
 ### 4. Start the dev server
 

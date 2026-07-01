@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { AppError } from "./errors";
+import { logger } from "./logger";
 
 /**
  * Parses pagination params from a request URL.
@@ -41,6 +42,7 @@ export function paginatedResponse<T>(data: T[], total: number, page: number, lim
  */
 export function handleApiError(err: unknown) {
   if (err instanceof AppError) {
+    logger.warn({ code: err.code, statusCode: err.statusCode }, err.message);
     return NextResponse.json(
       { error: err.message, code: err.code, ...(err.details ? { details: err.details } : {}) },
       { status: err.statusCode }
@@ -48,6 +50,7 @@ export function handleApiError(err: unknown) {
   }
 
   if (err instanceof z.ZodError) {
+    logger.warn({ code: "VALIDATION_ERROR" }, "Request validation failed");
     return NextResponse.json(
       {
         error: "Invalid input",
@@ -83,7 +86,7 @@ export function handleApiError(err: unknown) {
     }
   }
 
-  console.error("[API Error]", err);
+  logger.error({ err }, "Unhandled API error");
   return NextResponse.json(
     { error: "Internal server error", code: "INTERNAL_ERROR" },
     { status: 500 }
@@ -93,7 +96,8 @@ export function handleApiError(err: unknown) {
 /**
  * Wraps a route handler so thrown errors (AppError, ZodError, Prisma errors, etc.)
  * are automatically converted to a standardized JSON response, removing the need
- * for repetitive try/catch blocks in every route.
+ * for repetitive try/catch blocks in every route. Also logs request completion
+ * (method, path, status, duration) at debug level for basic observability.
  *
  * Usage:
  *   export const GET = asyncHandler(async (req) => { ... });
@@ -102,10 +106,37 @@ export function asyncHandler<Args extends unknown[]>(
   handler: (...args: Args) => Promise<Response>
 ) {
   return async (...args: Args): Promise<Response> => {
+    const req = args[0] as Request | undefined;
+    const start = Date.now();
+
     try {
-      return await handler(...args);
+      const response = await handler(...args);
+      if (req) {
+        logger.debug(
+          {
+            method: req.method,
+            path: new URL(req.url).pathname,
+            status: response.status,
+            durationMs: Date.now() - start,
+          },
+          "Request completed"
+        );
+      }
+      return response;
     } catch (err) {
-      return handleApiError(err);
+      const response = handleApiError(err);
+      if (req) {
+        logger.debug(
+          {
+            method: req.method,
+            path: new URL(req.url).pathname,
+            status: response.status,
+            durationMs: Date.now() - start,
+          },
+          "Request failed"
+        );
+      }
+      return response;
     }
   };
 }

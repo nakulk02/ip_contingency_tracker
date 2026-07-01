@@ -10,8 +10,10 @@ import { logger } from "./logger";
  */
 export function parsePagination(req: Request) {
   const { searchParams } = new URL(req.url);
-  const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
-  const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "25", 10)));
+  const rawPage = parseInt(searchParams.get("page") || "1", 10);
+  const rawLimit = parseInt(searchParams.get("limit") || "25", 10);
+  const page = Math.max(1, Number.isNaN(rawPage) ? 1 : rawPage);
+  const limit = Math.min(100, Math.max(1, Number.isNaN(rawLimit) ? 25 : rawLimit));
   const skip = (page - 1) * limit;
   return { page, limit, skip };
 }

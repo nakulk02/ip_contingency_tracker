@@ -9,9 +9,10 @@ export default async function proxy(req: NextRequest) {
     (route) => path === route || path.startsWith(route + "/")
   );
   const isAuthApi = path.startsWith("/api/auth");
+  const isHealthCheck = path.startsWith("/api/health");
 
-  // Allow public routes and auth API through
-  if (isPublicRoute || isAuthApi) {
+  // Allow public routes, auth API, and health checks through
+  if (isPublicRoute || isAuthApi || isHealthCheck) {
     return NextResponse.next();
   }
 
@@ -28,7 +29,5 @@ export default async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };

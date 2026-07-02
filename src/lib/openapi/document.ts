@@ -461,6 +461,13 @@ export function generateOpenApiDocument() {
           responses: { "200": { description: "User created" }, ...errorResponses },
         },
       },
+
+      // Note: /api/health and /api/health/ready are intentionally not
+      // documented here. They live outside the /api/v1 versioned surface
+      // this document describes, are consumed by infrastructure (load
+      // balancers, orchestrators) rather than API integrators, and take
+      // no parameters worth documenting. See the README's Health Checks
+      // section instead.
     },
   });
 }

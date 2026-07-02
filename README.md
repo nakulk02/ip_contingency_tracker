@@ -88,6 +88,13 @@ After seeding, you can log in with:
 
 The seed data includes sample IP assets, people with various roles, and assignment agreements — including deliberate gaps that appear on the dashboard.
 
+## Health Checks
+
+Two unauthenticated endpoints are available for infrastructure use (load balancers, orchestrators, CI):
+
+- **`GET /api/health`** — liveness. Returns `200` if the process is up and can respond. Checks nothing else, so a slow database doesn't make this report unhealthy.
+- **`GET /api/health/ready`** — readiness. Returns `200` if the app can serve real requests (database reachable within 3s), `503` otherwise. Use this to gate whether traffic should be routed to an instance.
+
 ## License
 
 Private — All rights reserved.

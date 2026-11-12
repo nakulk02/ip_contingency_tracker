@@ -31,7 +31,8 @@ describe("generateOpenApiDocument", () => {
     const doc = generateOpenApiDocument();
     const paths = Object.keys(doc.paths ?? {});
     const intelligenceRoutes = paths.filter((p) => p.startsWith("/intelligence/"));
-    expect(intelligenceRoutes.length).toBe(8);
+    expect(intelligenceRoutes.length).toBe(9);
+    expect(intelligenceRoutes).toContain("/intelligence/assistant");
   });
 
   it("marks mutating routes as requiring the session cookie", () => {

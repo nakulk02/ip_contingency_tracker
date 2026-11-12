@@ -18,9 +18,12 @@
     "test:coverage": "jest --coverage",
     "seed": "prisma db seed",
     "db:reset": "prisma migrate reset",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "eval": "tsx eval/run.ts",
+    "eval:offline": "tsx eval/run.ts --offline"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.106.0",
     "@base-ui/react": "^1.6.0",
     "@prisma/client": "^6.19.3",
     "bcryptjs": "^3.0.3",
@@ -69,6 +72,7 @@
     "prettier": "^3.9.4",
     "tailwindcss": "^4",
     "ts-jest": "^29.4.11",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   },
   "lint-staged": {

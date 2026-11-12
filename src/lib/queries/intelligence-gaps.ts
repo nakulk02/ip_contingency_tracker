@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NotFoundError } from "@/lib/errors";
+import { calculateAssignmentRiskScore } from "@/lib/risk-scoring";
 
 type GapWithRelations = NonNullable<
   Awaited<ReturnType<typeof prisma.assignmentAgreement.findUnique>>
@@ -20,14 +21,36 @@ type GapWithRelations = NonNullable<
   } | null;
 };
 
+/** The flat gap shape the intelligence tools (ip-contingency-mcp) expect. */
+export type IntelligenceGap = ReturnType<typeof toIntelligenceGap>;
+
+const DAY_MS = 1000 * 60 * 60 * 24;
+
+/**
+ * Days the assignment has been outstanding: counted from the later of the
+ * person's start date and the asset's filing date, which is when a signed
+ * assignment should have existed.
+ */
+function daysOutstanding(gap: GapWithRelations, now = new Date()): number {
+  const from = Math.max(gap.person.startDate.getTime(), gap.ipAsset?.filingDate?.getTime() ?? 0);
+  return Math.max(0, Math.floor((now.getTime() - from) / DAY_MS));
+}
+
 /**
  * Shapes a Prisma assignment-agreement record into the flat structure
- * expected by the intelligence tool layer.
- *
- * Note: riskScore, riskLevel, and daysOverdue are currently placeholders
- * pending real risk-scoring integration for this code path.
+ * expected by the intelligence tool layer, with a real risk score from
+ * src/lib/risk-scoring.ts.
  */
 function toIntelligenceGap(gap: GapWithRelations) {
+  const risk = calculateAssignmentRiskScore(
+    gap.person.startDate,
+    gap.person.endDate,
+    gap.ipAsset?.type,
+    gap.ipAsset?.status,
+    gap.ipAsset?.filingDate,
+    gap.ipAsset?.jurisdiction
+  );
+
   return {
     id: gap.id,
     personId: gap.personId,
@@ -42,16 +65,19 @@ function toIntelligenceGap(gap: GapWithRelations) {
     assetStatus: gap.ipAsset?.status || "DRAFT",
     jurisdiction: gap.ipAsset?.jurisdiction || "US",
     filingDate: gap.ipAsset?.filingDate,
-    riskScore: 50,
-    riskLevel: "MEDIUM" as const,
-    daysOverdue: 0,
+    riskScore: risk.score,
+    riskLevel: risk.level,
+    daysOverdue: daysOutstanding(gap),
   };
 }
 
-/** Fetches and formats all non-deleted gaps for tools that operate on a full gap set. */
+/**
+ * Fetches and formats all open gaps: non-deleted agreements that are not yet
+ * signed (status MISSING or PENDING).
+ */
 export async function getFormattedGaps() {
   const gaps = await prisma.assignmentAgreement.findMany({
-    where: { deletedAt: null },
+    where: { deletedAt: null, status: { not: "SIGNED" } },
     include: { person: true, ipAsset: true },
   });
 
@@ -65,7 +91,7 @@ export async function getFormattedGap(gapId: string) {
     include: { person: true, ipAsset: true },
   });
 
-  if (!gap) {
+  if (!gap || gap.deletedAt) {
     throw new NotFoundError("Gap");
   }
 

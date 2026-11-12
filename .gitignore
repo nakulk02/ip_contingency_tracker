@@ -49,3 +49,6 @@ next-env.d.ts
 docs/Plan_v1.md
 docs/code-audit.md
 docs/Implementation_Plan.md
+
+# Assistant eval output
+eval/results/

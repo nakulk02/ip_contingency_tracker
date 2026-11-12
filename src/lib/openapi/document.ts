@@ -19,6 +19,7 @@ import {
   CsvImportSchema,
   NaturalLanguageQuerySchema,
 } from "./schemas";
+import { assistantRequestSchema } from "@/lib/assistant/guardrails";
 
 const idParam = z.object({ id: z.string().describe("Record ID") });
 const pageQuery = z.object({
@@ -449,6 +450,31 @@ export function generateOpenApiDocument() {
           security,
           requestBody: { content: { "application/json": { schema: NaturalLanguageQuerySchema } } },
           responses: { "200": { description: "Query result" }, ...errorResponses },
+        },
+      },
+
+      "/intelligence/assistant": {
+        post: {
+          tags: ["Intelligence"],
+          summary: "Ask the IP compliance assistant a question",
+          description:
+            "Claude chooses and chains the intelligence tools (rankPriorities, recommendActions, " +
+            "checkCompliance, ...) to answer a natural-language question, and returns the answer " +
+            "with a trace of every tool call. Off-topic and prompt-injection questions are refused " +
+            "without calling the model (refused: true). Every tool call is written to the " +
+            "ToolCallAudit table with personal information removed.",
+          security,
+          requestBody: {
+            content: {
+              "application/json": {
+                schema: assistantRequestSchema.meta({ id: "AssistantQuestionInput" }),
+              },
+            },
+          },
+          responses: {
+            "200": { description: "Answer, refusal flag, tool trace, token usage and latency" },
+            ...errorResponses,
+          },
         },
       },
 
